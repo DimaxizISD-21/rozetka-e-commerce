@@ -1,2 +1,2 @@
-# rozetka-e-commerce project
+# Rozetka-e-commerce project
 ## Heroku website: https://rozetka-e-commerce.herokuapp.com/

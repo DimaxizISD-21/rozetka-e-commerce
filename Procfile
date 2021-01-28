@@ -1,0 +1,1 @@
+web: gunicorn rozetka_project.wsgi

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Реєстрація прошла успішно! {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-md-6 mx-auto">
+                <div class="card">
+                    <h3 class="card-title text-center">Реєстрація пройшла успішно!</h3>
+                    <div class="card-body">
+                        <div class="wrap-registration text-center my-3">
+                            <a class="text-decoration-none" style="color: #212529;" href="{% url 'accounts:login' %}">Увійти в профіль користувача</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

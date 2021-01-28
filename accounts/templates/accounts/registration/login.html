@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Вхід в профіль користувача {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-md-6 mx-auto">
+                <div class="card">
+                    <h3 class="card-title text-center">Вхід в профіль користувача</h3>
+                    <div class="card-body">
+                        <form method="POST" action="">{% csrf_token %}
+                            <div class="form-group">
+                                {{ form.as_p }}
+                            </div>
+                            <div class="wrap-btn d-flex align-items-center justify-content-between">
+                                <button type="submit" class="btn btn-primary">Увійти</button>
+                                <a class="text-decoration-none" style="color: #212529;" href="#reset-password">Забули пароль?</a>
+                            </div>
+                            <div class="wrap-registration text-center my-3">
+                                <button type="button" class="btn btn-secondary" >
+                                    <a class="text-decoration-none" style="color: white;" href="{% url 'accounts:registration' %}">Зареєструватися</a>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

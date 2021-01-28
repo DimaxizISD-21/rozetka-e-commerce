@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %} Кошик покупок {% endblock %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col my-4">
+                <div class="card p-3">
+                    <h3 style="card-title">Кошик покупок</h3>
+                    <div class="card-body">
+                        {% if cart %}
+                            {% for item in cart %}
+                                {% with product=item.product %}
+                                    <div class="card mb-3">
+                                        <div class="row g-0 d-flex justify-content-center align-items-center">
+                                            <div class="col-md-2">
+                                                <a href="{% url 'shop:product_detail' product.catalog.slug product.slug %}" style="text-decoration: none; color: black;" class="card-link">
+                                                    <div class="wrap-img d-flex">
+                                                        <img src="{{ product.image.url }}" style="max-height: 125px; max-width: 100%;" class="mx-auto" alt="{{ product.product_name }}">
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">{{ product.product_name }}</h6>
+                                                    <p>{{ product.description|truncatewords:15 }}</p>
+                                                    <p>Кількість: {{ item.quantity }} </p>
+                                                    <div class="justify-content-between d-flex">
+                                                        <p class="align-items-center card-text" style="font-size: 20px;"><b>{{ product.price }} грн</b></p>
+                                                        <form action="{% url 'cart:cart_remove' product.id %} " method="post">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-sm btn-danger">Видалити</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endwith %}
+                            {% endfor %}
+                                {% if user.is_authenticated %}
+                                    <h4 class="card-title text-center">Всього до сплати {{ cart.get_total_price }} грн.</h4>
+                                    <div class="wrap-add-order text-center my-3">
+                                        <button type="button" class="btn btn-success" >
+                                            <a class="text-decoration-none" style="color: white;" href="{% url 'orders:create-order' %}">Зробити замовлення</a>
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <h4 class="card-title text-center">Всього до сплати {{ cart.get_total_price }} грн.</h4>
+                                    <div class="wrap-add-order text-center my-3">
+                                        <p>Щоб мати можливість оформити замовлення, Вам потрібно <a style="color: black" href="{% url 'accounts:login' %}">увійти</a> в профіль!</p>
+                                    </div>
+                                {% endif %}
+                        {% else %}
+                            <h4 class="text-center">Ваш список товарів порожній.</h4>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

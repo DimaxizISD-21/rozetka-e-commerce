@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ product.product_name }} {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="card my-4 p-2">
+            <div class="card-title d-flex justify-content-between align-items-center">
+                <h3>{{ product.product_name }}</h3>
+                <div class="d-flex justify-content-end align-items-center">
+                    <p class="card-text mt-3" style="font-size: 21px;"><b>{{ product.price }} грн</b></p>
+                    <div class="btn-cart-wrapper ms-2">
+                        <form class="d-flex" action="{% url 'cart:cart_add' product.id %}" method="post">
+                            {% csrf_token %}
+                            {{ cart_form }}
+                            <button class="btn btn-sm btn-success d-flex ms-2 align-items-center" type="submit" tabindex="-1" aria-disabled="true">
+                                <img class="cart-logo" style="height: 23px;" src="{% static 'img/cart-white.svg' %}" alt="cart">
+                                <span style="font-size: 18px;">Купити</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="card-body">
+                        <div class="wrap-img d-flex">
+                            <img src="{{ product.image.url }}" style="max-height: 100%; max-width: 100%;" class="mx-auto" alt="{{ product.product_name }}">
+                        </div>
+                        <div class="description mt-5">
+                            <h3 class="card-title">Опис <span class="fw-normal" style="color: gray;">{{ product.product_name }}</span></h3>
+                            <div id="description-text">
+                                <p class="collapse" id="collapseExample">
+                                    {{ product.description }}
+                                </p>
+                                <a class="btn btn-secondary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"></a>
+                            </div>
+                        </div>
+                        <div class="characteristic mt-3">
+                            <h3 class="card-title">Характеристики <span class="fw-normal" style="color: gray;">{{ product.product_name }}</span></h3>
+                            <div class="characteristic-list my-3">
+                                {% for char in product.characteristics.all %}
+                                    <div class="row">
+                                        <div class="col-md-4 m-2">
+                                            <b>{{ char.characteristic }}</b>
+                                        </div>
+                                        <div class="col-md-7 m-2">
+                                            {{ char.value }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="card-body">
+                        <h3 class="card-title">Відгуки покупців</h3>
+
+                        <p>Comments</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

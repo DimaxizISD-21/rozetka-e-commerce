@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Побутова техніка {% endblock %}
+
+{% block content %}
+    <div class="row my-3">
+        <div class="col-md-2">
+           <form action="{% url 'shop:pobutova-tehnika' %}" method="get">
+              <div class="wrap-form-title d-flex justify-content-between align-items-center mb-2">
+                 <h5>Фільтри</h5>
+                 <input class="btn-sm btn-dark" type="submit" value="Пошук за фільтром">
+              </div>
+              <div class="card">
+                 <article class="card-group-item">
+                    <header class="card-header">
+                       <h6 class="title">Виробник</h6>
+                    </header>
+                    <div class="filter-content">
+                       <div class="card-body">
+                          {% for manufacturer in view.get_pob_manufacturer %}
+                          <div class="form-check">
+                             <input class="form-check-input checked-style" type="checkbox" name="manufacturer" value="{{ manufacturer.value }}">
+                             <label class="form-check-label">
+                             {{ manufacturer.value }}
+                             </label>
+                          </div>
+                          <!-- form-check.// -->
+                          {% endfor %}
+                       </div>
+                       <!-- card-body.// -->
+                    </div>
+                 </article>
+                 <!-- card-group-item.// -->
+              </div>
+              <!-- card.// -->
+           </form>
+
+           <form action="{% url 'shop:pobutova-tehnika' %}" method="get">
+              <div class="card">
+                 <article class="card-group-item">
+                    <header class="card-header">
+                       <h6 class="title">Ціна</h6>
+                    </header>
+                    <div class="filter-content">
+                       <div class="card-body">
+                          <div class="form-row">
+                             <div class="form-group">
+                                <div class="value-wrap d-flex justify-content-between">
+                                   <div class="min">0 <span>грн</span></div>
+                                   <div class="max">100000 <span>грн</span></div>
+                                </div>
+                                <div class="multi-range-slider">
+                                   <input type="range" id="input-left" name="min_price" min="0" max="100000" value="0">
+                                   <input type="range" id="input-right" name="max_price" min="0"  max="100000" value="100000">
+                                   <div class="slider">
+                                      <div class="track"></div>
+                                      <div class="range"></div>
+                                   </div>
+                                </div>
+                                <button class="btn-sm btn-dark d-flex mx-auto" type="submit">Ok</button>
+                             </div>
+                          </div>
+                       </div>
+                       <!-- card-body.// -->
+                    </div>
+                 </article>
+                 <!-- card-group-item.// -->
+              </div>
+              <!-- card.// -->
+           </form>
+        </div>
+
+        <div class="col-md-10 my-3">
+            <h3>Побутова техніка</h3>
+            <div class="row g-4 m-2">
+                {% if product_list %}
+                    {% for product in product_list %}
+                        <div class="col-md-3">
+                            <div class="card">
+                                <a href="{% url 'shop:product_detail' product.catalog.slug product.slug %}" style="text-decoration: none; color: black;" class="card-link">
+                                    <div class="wrap-img d-flex">
+                                        <img src="{{ product.image.url }}" style="max-height: 125px; max-width: 100%;" class="mx-auto" alt="{{ product.product_name }}">
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <a href="{% url 'shop:product_detail' product.catalog.slug product.slug %}" style="text-decoration: none; color: black;" class="card-link">
+                                        <h6 class="card-title">{{ product.product_name }}</h6>
+                                    </a>
+                                    <p>{{ product.description|truncatewords:11 }}</p>
+                                    <div class="justify-content-between align-items-center d-flex">
+                                        <p class="card-text" style="font-size: 20px;"><b>{{ product.price }} грн</b></p>
+                                        <div class="btn-cart-wrapper">
+                                            <form class="d-flex" action="{% url 'cart:cart_add' product.id %}" method="post">
+                                                {% csrf_token %}
+                                                {{ cart_form }}
+                                                <button class="btn btn-sm" type="submit" tabindex="-1" aria-disabled="true">
+                                                    <img class="cart-logo" style="height: 25px;" src="{% static 'img/cart-green.svg' %}" alt="cart">
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <h4 class="text-center">Ваш запит не знайдено.</h4>
+                {% endif %}
+           </div>
+        </div>
+    </div>
+{% endblock %}

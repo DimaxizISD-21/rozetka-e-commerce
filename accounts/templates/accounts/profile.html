@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Профіль користувача {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row my-3">
+            <div class="col">
+                <div class="card p-3">
+                    <h3 class="card-title text-center">Профіль користувача</h3>
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="contact-inform">
+                                        <h4>Контактна інформація:</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="contact-inform-wrap d-flex align-items-center justify-content-start">
+                                                    <img style="max-height: 125px; max-width: 100%;" src="{% static 'img/user-profile.png' %}" alt="">
+                                                    <div class="contact-inform-descr ms-2">
+                                                        <span><b>Ім'я:</b> {{ user.f_name }}</span> <br>
+                                                        <span><b>Прізвище:</b> {{ user.l_name }}</span> <br>
+                                                        <span><b>Телефон:</b> +{{ user.phone_number }}</span> <br>
+                                                        <span><b>Email-адрес:</b> {{ user.email }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="btn-wrapper text-center my-3">
+                                                    <button type="button" class="btn btn-sm btn-primary" >
+                                                        <a class="text-decoration-none" style="color: white;" href="{% url 'accounts:change-password' %}">Зміна пароля</a>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-danger ms-2" >
+                                                        <a class="text-decoration-none" style="color: white;" href="{% url 'accounts:logout' %}">Вихід з профілю</a>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="orders-inform">
+                                        <h4 class="card-title">Мої замовлення:</h4>
+                                        {% if orders_list %}
+                                            {% for order in orders_list %}
+                                                <div class="card mb-3">
+                                                    <div class="orders-inform-title text-center">
+                                                        <b>{{ order }}</b>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        {% for item in order.items.all %}
+                                                            <div class="wrap-img d-flex mb-2">
+                                                                <img src="{{ item.product.image.url }}" style="max-height: 125px; max-width: 100%;" class="mx-auto" alt="{{ product.product_name }}">
+                                                            </div>
+                                                            <b>{{ item.product }}</b>
+                                                            <p><b>{{ item.product.price }} грн.</b></p>
+                                                        {% endfor %}
+                                                        <span><b>Cтатус:</b> {{ order.status }}</span><br>
+                                                        <span><b>Було створено:</b> {{ order.created }}</span><br>
+                                                        <span><b>Було оновлено:</b> {{ order.updated }}</span><br>
+                                                        <span><b>До сплати:</b> {{ order.get_total_cost }} грн.</span>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="card p-2">
+                                                <p>Ви ще не замовляли товари!</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% else %}
+                            <p>data is empty</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

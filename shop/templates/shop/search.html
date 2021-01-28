@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Результати пошуку {% endblock %}
+
+{% block content %}
+<div class="row my-3">
+    <div class="col-md-2">
+        <nav class="nav flex-column">
+            <h5>Популярні запити</h5>
+            <a class="nav-link text-decoration-none" style="color: black;" href="{% url 'shop:pobutova-tehnika' %}">Побутова техніка</a>
+            <a class="nav-link text-decoration-none" style="color: black;" href="{% url 'shop:noutbuki-ta-kompyuteri' %}">Ноутбуки та комп'ютери</a>
+            <a class="nav-link text-decoration-none" style="color: black;" href="{% url 'shop:tovari-dlya-domu' %}">Товари для дому</a>
+            <a class="nav-link text-decoration-none" style="color: black;" href="{% url 'shop:sport-i-zahoplennya' %}">Спорт і захоплення</a>
+            <a class="nav-link text-decoration-none" style="color: black;" href="{% url 'shop:smartfoni-tv-i-elektornika' %}">Смартфони, ТВ і електроніка</a>
+        </nav>
+    </div>
+
+    <div class="col-md-10">
+        <h3>Результати пошуку</h3>
+        <div class="row g-4 m-2">
+            {% if product_list %}
+                {% for product in product_list %}
+                    <div class="col-md-3">
+                        <div class="card">
+                            <a href="{% url 'shop:product_detail' product.catalog.slug product.slug %}" style="text-decoration: none; color: black;" class="card-link">
+                                <div class="wrap-img d-flex">
+                                    <img src="{{ product.image.url }}" style="max-height: 125px; max-width: 100%;" class="mx-auto" alt="{{ product.product_name }}">
+                                </div>
+                            </a>
+                            <div class="card-body">
+                                <a href="{% url 'shop:product_detail' product.catalog.slug product.slug %}" style="text-decoration: none; color: black;" class="card-link">
+                                    <h6 class="card-title">{{ product.product_name }}</h6>
+                                </a>
+                                <p>{{ product.description|truncatewords:11 }}</p>
+                                <div class="justify-content-between d-flex">
+                                    <p class="align-items-center card-text" style="font-size: 20px;"><b>{{ product.price }} грн</b></p>
+                                    <div class="btn-cart-wrapper">
+                                        <form class="d-flex" action="{% url 'cart:cart_add' product.id %}" method="post">
+                                            {% csrf_token %}
+                                            {{ cart_form }}
+                                            <button class="btn btn-sm" type="submit" tabindex="-1" aria-disabled="true">
+                                                <img class="cart-logo" style="height: 25px;" src="{% static 'img/cart-green.svg' %}" alt="cart">
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h4 class="text-center">Ваш запит не знайдено.</h4>
+            {% endif %}
+       </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,1 +1,1 @@
-web: gunicorn vacancy_seacher.wsgi
+web: gunicorn rozetka_project.wsgi
